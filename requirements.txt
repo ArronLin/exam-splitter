@@ -3,3 +3,4 @@ uvicorn
 pymupdf
 pillow
 numpy
+PySide6

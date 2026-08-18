@@ -13,6 +13,9 @@ import json
 import argparse
 import fitz
 import subprocess
+
+# Prevent OCR console windows from flashing while the native desktop app is running.
+CREATE_NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 from PIL import Image
 from common import tesseract_env, load_layout, load_cuts
 
@@ -53,7 +56,7 @@ def run_ocr(pdf, workdir, tesseract=None, skip=2):
         crop.save(png)
         subprocess.run([exe, png, out, "-l", "chi_sim+eng", "--psm", "6"],
                        check=True, env=env, stdout=subprocess.DEVNULL,
-                       stderr=subprocess.DEVNULL)
+                       stderr=subprocess.DEVNULL, creationflags=CREATE_NO_WINDOW)
         with open(out + ".txt", encoding="utf-8") as f:
             return f.read()
 
