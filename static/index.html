@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#253244">
+  <title>试卷合订本拆分器</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">跳到主要内容</a>
+  <header class="site-header">
+    <div class="brand" aria-label="试卷合订本拆分器"><span class="brand-mark" aria-hidden="true">册</span><span>试卷合订本拆分器</span></div>
+    <div class="privacy-badge"><span aria-hidden="true">●</span> 本地运行 · 数据不上传</div>
+  </header>
+  <main id="workspace" class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">本地 PDF 处理工作台</p>
+      <h1 id="page-title">把混排合订本拆成可交付的独立试卷</h1>
+      <p>上传一份或多份扫描 PDF。系统会完成版式识别、分栏 OCR、试卷归并与独立 PDF 导出；发现疑似误判时，你可以只复核需要确认的页面。</p>
+      <ol class="workflow" aria-label="处理流程"><li><span>1</span>准备文件</li><li><span>2</span>自动处理</li><li><span>3</span>异常审核</li><li><span>4</span>验收交付</li></ol>
+    </section>
+    <section class="setup-panel" aria-labelledby="setup-title">
+      <div class="section-heading"><div><p class="eyebrow">第一步</p><h2 id="setup-title">准备任务</h2></div><p class="section-hint">可一次处理多份 PDF；处理完成后每份文件都有独立结果。</p></div>
+      <div class="upload-grid">
+        <div>
+          <input id="file-input" type="file" accept="application/pdf,.pdf" multiple class="sr-only">
+          <label id="drop-zone" class="drop-zone" for="file-input" tabindex="0" role="button" aria-describedby="upload-help"><span class="upload-icon" aria-hidden="true">⇧</span><span class="drop-title">选择 PDF，或把文件拖放到这里</span><span id="upload-help" class="drop-help">支持多份合订本 · 仅接收 PDF · 文件不会上传到云端</span></label>
+          <div id="file-error" class="field-error" role="alert" hidden></div>
+        </div>
+        <aside class="summary-box" aria-labelledby="summary-title"><p id="summary-title" class="summary-label">本次处理摘要</p><dl><div><dt>已选文件</dt><dd id="summary-files">0 份</dd></div><div><dt>总文件大小</dt><dd id="summary-size">0 MB</dd></div><div><dt>设置方式</dt><dd>逐份设置</dd></div></dl><p class="summary-note">开始前可逐份调整跳过前导页数；系统会把结果写到你选择的输出位置。</p></aside>
+      </div>
+      <section id="upload-preview-panel" class="upload-preview-panel" aria-labelledby="upload-preview-title" hidden>
+        <div class="preview-heading"><div><p class="eyebrow">提交前检查</p><h3 id="upload-preview-title">从预览中选择正文首页</h3></div><p>点击任一页，将其前面的页面设为“跳过前导页”。系统会按此设置开始版式识别。</p></div>
+        <div id="upload-preview-list" class="upload-preview-list" aria-live="polite"></div>
+      </section>
+      <div id="file-list" class="file-list" aria-live="polite" aria-label="已选择文件"></div>
+      <div class="output-row"><div class="output-field"><label for="out-dir">输出文件夹</label><div class="input-group"><input id="out-dir" type="text" placeholder="不填写时，结果将暂存于应用工作目录" autocomplete="off"><button id="browse-btn" class="button secondary" type="button">选择文件夹</button></div><p id="output-help" class="field-help">建议为每批任务选择单独的输出文件夹，避免与既有结果混放。</p></div><button id="start-btn" class="button primary start-button" type="button" disabled>开始处理 <span aria-hidden="true">→</span></button></div>
+    </section>
+    <section id="dashboard" class="dashboard" aria-labelledby="dashboard-title" hidden><div class="section-heading dashboard-heading"><div><p class="eyebrow">第二步</p><h2 id="dashboard-title">处理与审核</h2></div><div id="batch-status" class="batch-status" role="status">等待提交</div></div><div id="overall-progress" class="overall-progress" hidden><div class="overall-progress-copy"><span id="overall-text">正在准备任务</span><span id="overall-count">0 / 0</span></div><div class="progress-track" aria-hidden="true"><div id="overall-bar" class="progress-fill"></div></div></div><div id="task-list" class="task-list" aria-live="polite"></div></section>
+    <section id="results" class="results" aria-labelledby="results-title" hidden><div class="section-heading"><div><p class="eyebrow">第三步</p><h2 id="results-title">结果与交付</h2></div><button id="new-task-btn" class="button secondary" type="button">处理新文件</button></div><div id="result-summary" class="result-summary"></div><div id="result-list" class="result-list"></div></section>
+  </main>
+  <dialog id="preview-dialog" class="preview-dialog" aria-labelledby="preview-title"><div class="dialog-head"><div><p class="eyebrow">源页预览</p><h2 id="preview-title">正在加载页面</h2></div><button class="icon-button" type="button" data-close-dialog="preview-dialog" aria-label="关闭原页预览">×</button></div><img id="preview-image" alt="试卷原页预览"></dialog>
+  <dialog id="upload-page-dialog" class="preview-dialog upload-page-dialog" aria-labelledby="upload-page-title"><div class="dialog-head"><div><p class="eyebrow">提交前预览</p><h2 id="upload-page-title">逐页查看</h2></div><button class="icon-button" type="button" data-close-dialog="upload-page-dialog" aria-label="关闭上传预览">×</button></div><div class="upload-page-navigation"><button id="upload-prev-page" class="button secondary page-nav-button" type="button" aria-label="查看上一页">‹ <span>上一页</span></button><div><p id="upload-page-meta" class="dialog-description"></p><p id="upload-page-counter" class="page-counter" aria-live="polite"></p></div><button id="upload-next-page" class="button secondary page-nav-button" type="button" aria-label="查看下一页"><span>下一页</span> ›</button></div><div class="upload-page-viewer"><img id="upload-page-image" alt="上传 PDF 的放大页面预览"></div><div class="dialog-actions"><button class="button secondary" type="button" data-close-dialog="upload-page-dialog">返回缩略图</button><button id="set-content-first-btn" class="button primary" type="button">设为正文首页</button></div></dialog>
+  <dialog id="correction-dialog" class="correction-dialog" aria-labelledby="correction-title"><div class="dialog-head"><div><p class="eyebrow">异常审核</p><h2 id="correction-title">检查疑似单栏页面</h2></div><button class="icon-button" type="button" data-close-dialog="correction-dialog" aria-label="关闭版式校正">×</button></div><p id="correction-description" class="dialog-description">系统只列出可能需要确认的页面。保持不变的页面不会重复处理。</p><form id="correction-form" class="correction-list"></form><div class="dialog-actions"><button type="button" class="button secondary" data-close-dialog="correction-dialog">暂不处理</button><button id="apply-correction-btn" type="button" class="button primary">应用校正并重新拆分</button></div></dialog>
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

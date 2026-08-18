@@ -7,3 +7,9 @@ runs/
 
 # ---- 拆分输出残留（用户选择输出目录时可能落在仓库内） ----
 语文/
+
+# ---- PyInstaller local build and release artifacts ----
+build/
+dist/
+*.spec
+发布/
